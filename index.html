@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ထိုင်း 3D ထီ</title>
+    <style>
+        :root {
+            --primary-color: #64b5f6; /* Light blue */
+            --secondary-color: #ffffff; /* White */
+            --accent-color: #1976d2; /* Darker blue */
+            --text-color: #333333;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+        }
+        
+        * {
+            box-sizing: border-box;
+            font-family: 'Pyidaungsu', 'Noto Sans Myanmar', sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 10px;
+        }
+        
+        .logo {
+            text-align: center;
+            margin: 10px 0;
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 24px;
+            padding: 10px;
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .card {
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            text-decoration: none;
+            text-align: center;
+            font-size: 16px;
+            margin: 5px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+        }
+        
+        .btn:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+        }
+        
+        .btn-danger {
+            background-color: var(--error-color);
+        }
+        
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        .nav-tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-tab.active {
+            border-color: #ddd;
+            border-bottom: 1px solid white;
+            background-color: white;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            animation: slideIn 0.5s, slideOut 0.5s 2.5s;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); }
+            to { transform: translateX(100%); }
+        }
+        
+        .user-info {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .number-input {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        
+        .number-input input {
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            text-align: center;
+            margin: 0 5px;
+            border: 2px solid var(--primary-color);
+            border-radius: 5px;
+        }
+        
+        .result-display {
+            text-align: center;
+            font-size: 18px;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #f0f8ff;
+            border-radius: 5px;
+        }
+        
+        .message-box {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .message {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        
+        .admin-message {
+            background-color: #e3f2fd;
+            text-align: left;
+        }
+        
+        .user-message {
+            background-color: #f5f5f5;
+            text-align: right;
+        }
+        
+        .transaction-history {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .transaction-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .winner-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .winner-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .winner-amount {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+        
+        .kbz-notice {
+            background-color: #fff8e1;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="container">
+        <div class="logo">ထိုင်း 3D ထီ</div>
+        <div class="card">
+            <div class="nav-tabs">
+                <div class="nav-tab active" onclick="switchTab('login-tab')">ဝင်ရောက်ရန်</div>
+                <div class="nav-tab" onclick="switchTab('register-tab')">အကောင့်ဖွင့်ရန်</div>
+            </div>
+            
+            <div id="login-tab" class="tab-content active">
+                <div class="form-group">
+                    <label for="login-phone">ဖုန်းနံပါတ်</label>
+                    <input type="text" id="login-phone" class="form-control" placeholder="09xxxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label for="login-password">လျှို့ဝှက်နံပါတ်</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="လျှို့ဝှက်နံပါတ်">
+                </div>
+                <button class="btn" onclick="login()">ဝင်ရောက်ရန်</button>
+            </div>
+            
+            <div id="register-tab" class="tab-content">
+                <div class="form-group">
+                    <label for="reg-name">အမည်</label>
+                    <input type="text" id="reg-name" class="form-control" placeholder="အမည်">
+                </div>
+                <div class="form-group">
+                    <label for="reg-phone">ဖုန်းနံပါတ်</label>
+                    <input type="text" id="reg-phone" class="form-control" placeholder="09xxxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">လျှို့ဝှက်နံပါတ်</label>
+                    <input type="password" id="reg-password" class="form-control" placeholder="လျှို့ဝှက်နံပါတ်">
+                </div>
+                <div class="form-group">
+                    <label for="reg-confirm-password">လျှို့ဝှက်နံပါတ် အတည်ပြုရန်</label>
+                    <input type="password" id="reg-confirm-password" class="form-control" placeholder="လျှို့ဝှက်နံပါတ် ပြန်ရိုက်ပါ">
+                </div>
+                <button class="btn" onclick="register()">အကောင့်ဖွင့်ရန်</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Admin Login -->
+    <div id="admin-login-page" class="container hidden">
+        <div class="logo">Admin ဝင်ရောက်ရန်</div>
+        <div class="card">
+            <div class="form-group">
+                <label for="admin-phone">ဖုန်းနံပါတ်</label>
+                <input type="text" id="admin-phone" class="form-control" placeholder="0999999999">
+            </div>
+            <div class="form-group">
+                <label for="admin-password">လျှို့ဝှက်နံပါတ်</label>
+                <input type="password" id="admin-password" class="form-control" placeholder="aungthura142492">
+            </div>
+            <button class="btn" onclick="adminLogin()">ဝင်ရောက်ရန်</button>
+            <button class="btn btn-warning" onclick="hideAdminLogin()">နောက်သို့</button>
+        </div>
+    </div>
+    
+    <!-- User Dashboard -->
+    <div id="user-dashboard" class="container hidden">
+        <div class="logo">ထိုင်း 3D ထီ</div>
+        <div class="user-info">
+            <div id="user-name-display">အမည်: အောင်သူရ</div>
+            <div id="user-phone-display">ဖုန်း: 09777777777</div>
+            <div id="user-balance-display">လက်ကျန်ငွေ: 0 ကျပ်</div>
+        </div>
+        
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchUserTab('bet-tab')">ထီထိုးရန်</div>
+            <div class="nav-tab" onclick="switchUserTab('deposit-tab')">ငွေသွင်း</div>
+            <div class="nav-tab" onclick="switchUserTab('withdraw-tab')">ငွေထုတ်</div>
+            <div class="nav-tab" onclick="switchUserTab('profile-tab')">ကျွန်ုပ်၏အကောင့်</div>
+            <div class="nav-tab" onclick="switchUserTab('history-tab')">မှတ်တမ်း</div>
+        </div>
+        
+        <div id="bet-tab" class="tab-content active">
+            <div class="result-display">
+                <div>နောက်ဆုံးထွက်ဂဏန်း: <span id="last-result">---</span></div>
+                <div>ဆုကြေး: <span id="prize-amount">---</span></div>
+            </div>
+            
+            <div class="number-input">
+                <input type="number" min="0" max="9" id="digit1">
+                <input type="number" min="0" max="9" id="digit2">
+                <input type="number" min="0" max="9" id="digit3">
+            </div>
+            
+            <div class="form-group">
+                <label for="bet-amount">ထိုးငွေ (ကျပ်)</label>
+                <input type="number" id="bet-amount" class="form-control" placeholder="ထိုးငွေပမာဏ">
+            </div>
+            
+            <button class="btn" onclick="placeBet()">ထီထိုးမည်</button>
+        </div>
+        
+        <div id="deposit-tab" class="tab-content">
+            <div class="kbz-notice">
+                KBZ Pay ဖြင့်သာငွေသွင်းနိုင်ပါသည်
+            </div>
+            <div class="card">
+                <div class="form-group">
+                    <label for="deposit-name">ငွေသွင်းသူအမည်</label>
+                    <input type="text" id="deposit-name" class="form-control" placeholder="အမည်">
+                </div>
+                <div class="form-group">
+                    <label for="deposit-phone">ငွေသွင်းသည့်ဖုန်းနံပါတ်</label>
+                    <input type="text" id="deposit-phone" class="form-control" placeholder="09xxxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label for="deposit-transaction">Transaction နံပါတ် (နောက်ဆုံး ၅ လုံး)</label>
+                    <input type="text" id="deposit-transaction" class="form-control" placeholder="Transaction နံပါတ်">
+                </div>
+                <div class="form-group">
+                    <label for="deposit-amount">ငွေပမာဏ (ကျပ်)</label>
+                    <input type="number" id="deposit-amount" class="form-control" placeholder="ငွေပမာဏ">
+                </div>
+                <button class="btn" onclick="submitDeposit()">ငွေသွင်းမည်</button>
+            </div>
+        </div>
+        
+        <div id="withdraw-tab" class="tab-content">
+            <div class="kbz-notice">
+                KBZ Pay ဖြင့်သာငွေထုတ်နိုင်ပါသည်
+            </div>
+            <div class="card">
+                <div class="form-group">
+                    <label for="withdraw-name">ငွေထုတ်သူအမည်</label>
+                    <input type="text" id="withdraw-name" class="form-control" placeholder="အမည်">
+                </div>
+                <div class="form-group">
+                    <label for="withdraw-phone">ငွေထုတ်မည့်ဖုန်းနံပါတ်</label>
+                    <input type="text" id="withdraw-phone" class="form-control" placeholder="09xxxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label for="withdraw-amount">ငွေပမာဏ (ကျပ်)</label>
+                    <input type="number" id="withdraw-amount" class="form-control" placeholder="ငွေပမာဏ">
+                </div>
+                <button class="btn" onclick="submitWithdraw()">ငွေထုတ်မည်</button>
+            </div>
+        </div>
+        
+        <div id="profile-tab" class="tab-content">
+            <div class="card">
+                <h3>ကျွန်ုပ်၏အကောင့်</h3>
+                <div class="form-group">
+                    <label>အမည်</label>
+                    <p id="profile-name">အောင်သူရ</p>
+                </div>
+                <div class="form-group">
+                    <label>ဖုန်းနံပါတ်</label>
+                    <p id="profile-phone">09777777777</p>
+                </div>
+                <div class="form-group">
+                    <label>လက်ကျန်ငွေ</label>
+                    <p id="profile-balance">0 ကျပ်</p>
+                </div>
+                <button class="btn btn-danger" onclick="logout()">အကောင့်မှထွက်ရန်</button>
+            </div>
+        </div>
+        
+        <div id="history-tab" class="tab-content">
+            <div class="card">
+                <h3>ငွေသွင်းမှတ်တမ်း</h3>
+                <div class="transaction-history" id="deposit-history">
+                    <!-- Deposit history will be populated here -->
+                </div>
+                
+                <h3>ငွေထုတ်မှတ်တမ်း</h3>
+                <div class="transaction-history" id="withdraw-history">
+                    <!-- Withdraw history will be populated here -->
+                </div>
+                
+                <h3>ထီးထိုးမှတ်တမ်း</h3>
+                <div class="transaction-history" id="bet-history">
+                    <!-- Bet history will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="container hidden">
+        <div class="logo">Admin Panel</div>
+        
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchAdminTab('users-tab')">အသုံးပြုသူများ</div>
+            <div class="nav-tab" onclick="switchAdminTab('transactions-tab')">ငွေလွှဲမှုများ</div>
+            <div class="nav-tab" onclick="switchAdminTab('results-tab')">ထီရလဒ်များ</div>
+            <div class="nav-tab" onclick="switchAdminTab('winners-tab')">ဆုရရှိသူများ</div>
+            <div class="nav-tab" onclick="switchAdminTab('messages-tab')">မက်ဆေ့ချ်များ</div>
+        </div>
+        
+        <div id="users-tab" class="tab-content active">
+            <div class="card">
+                <h3>အသုံးပြုသူစာရင်း</h3>
+                <div id="users-list">
+                    <!-- Users will be populated here -->
+                </div>
+            </div>
+        </div>
+        
+        <div id="transactions-tab" class="tab-content">
+            <div class="card">
+                <h3>ငွေသွင်းမှုများ</h3>
+                <div id="deposit-requests">
+                    <!-- Deposit requests will be populated here -->
+                </div>
+                
+                <h3>ငွေထုတ်မှုများ</h3>
+                <div id="withdraw-requests">
+                    <!-- Withdraw requests will be populated here -->
+                </div>
+            </div>
+        </div>
+        
+        <div id="results-tab" class="tab-content">
+            <div class="card">
+                <h3>ထီရလဒ်ထည့်ရန်</h3>
+                <div class="number-input">
+                    <input type="number" min="0" max="9" id="result-digit1">
+                    <input type="number" min="0" max="9" id="result-digit2">
+                    <input type="number" min="0" max="9" id="result-digit3">
+                </div>
+                <div class="form-group">
+                    <label for="prize-rate">ဆုကြေးနှုန်း</label>
+                    <input type="number" id="prize-rate" class="form-control" placeholder="ဆုကြေးနှုန်း" value="700">
+                </div>
+                <button class="btn" onclick="submitResult()">ရလဒ်ထည့်မည်</button>
+                
+                <h3>နောက်ဆုံးရလဒ်များ</h3>
+                <div id="past-results">
+                    <!-- Past results will be populated here -->
+                </div>
+            </div>
+        </div>
+        
+        <div id="winners-tab" class="tab-content">
+            <div class="card">
+                <h3>ဆုရရှိသူများ</h3>
+                <div class="winner-list" id="winners-list">
+                    <!-- Winners will be populated here -->
+                </div>
+            </div>
+        </div>
+        
+        <div id="messages-tab" class="tab-content">
+            <div class="card">
+                <h3>မက်ဆေ့ချ်ပေးပို့ရန်</h3>
+                <div class="form-group">
+                    <label for="message-user">အသုံးပြုသူ</label>
+                    <select id="message-user" class="form-control">
+                        <!-- Users will be populated here -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message-content">မက်ဆေ့ချ်</label>
+                    <textarea id="message-content" class="form-control" rows="3"></textarea>
+                </div>
+                <button class="btn" onclick="sendMessage()">ပေးပို့မည်</button>
+                
+                <h3>မက်ဆေ့ချ်များ</h3>
+                <div class="message-box" id="admin-messages">
+                    <!-- Messages will be populated here -->
+                </div>
+            </div>
+        </div>
+        
+        <button class="btn btn-danger" onclick="adminLogout()">အကောင့်မှထွက်ရန်</button>
+    </div>
+    
+    <script>
+        // Database simulation (in a real app, this would be server-side)
+        let users = [
+            { id: 1, name: "အောင်သူရ", phone: "09777777777", password: "user123", balance: 0 }
+        ];
+        
+        let admin = { phone: "0999999999", password: "aungthura142492" };
+        
+        let transactions = [];
+        let messages = [];
+        let results = [];
+        let bets = [];
+        let winners = [];
+        
+        // Current user and admin
+        let currentUser = null;
+        let currentAdmin = null;
+        
+        // DOM elements
+        const loginPage = document.getElementById('login-page');
+        const adminLoginPage = document.getElementById('admin-login-page');
+        const userDashboard = document.getElementById('user-dashboard');
+        const adminDashboard = document.getElementById('admin-dashboard');
+        
+        // Initialize the app
+        function init() {
+            // Check if there's a logged in user or admin in localStorage
+            const storedUser = localStorage.getItem('currentUser');
+            const storedAdmin = localStorage.getItem('currentAdmin');
+            
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                showUserDashboard();
+            } else if (storedAdmin) {
+                currentAdmin = JSON.parse(storedAdmin);
+                showAdminDashboard();
+            } else {
+                showLoginPage();
+            }
+        }
+        
+        // Show login page
+        function showLoginPage() {
+            loginPage.classList.remove('hidden');
+            adminLoginPage.classList.add('hidden');
+            userDashboard.classList.add('hidden');
+            adminDashboard.classList.add('hidden');
+        }
+        
+        // Show admin login
+        function showAdminLogin() {
+            loginPage.classList.add('hidden');
+            adminLoginPage.classList.remove('hidden');
+        }
+        
+        // Hide admin login
+        function hideAdminLogin() {
+            adminLoginPage.classList.add('hidden');
+            loginPage.classList.remove('hidden');
+        }
+        
+        // Show user dashboard
+        function showUserDashboard() {
+            loginPage.classList.add('hidden');
+            adminLoginPage.classList.add('hidden');
+            userDashboard.classList.remove('hidden');
+            adminDashboard.classList.add('hidden');
+            
+            // Update user info
+            document.getElementById('user-name-display').textContent = `အမည်: ${currentUser.name}`;
+            document.getElementById('user-phone-display').textContent = `ဖုန်း: ${currentUser.phone}`;
+            document.getElementById('user-balance-display').textContent = `လက်ကျန်ငွေ: ${currentUser.balance} ကျပ်`;
+            
+            // Update profile tab
+            document.getElementById('profile-name').textContent = currentUser.name;
+            document.getElementById('profile-phone').textContent = currentUser.phone;
+            document.getElementById('profile-balance').textContent = `${currentUser.balance} ကျပ်`;
+            
+            // Show last result if available
+            if (results.length > 0) {
+                const lastResult = results[results.length - 1];
+                document.getElementById('last-result').textContent = 
+                    `${lastResult.digit1}${lastResult.digit2}${lastResult.digit3}`;
+                document.getElementById('prize-amount').textContent = 
+                    `${lastResult.prizeRate}x ဆုကြေး`;
+            }
+            
+            // Load user history
+            loadUserHistory();
+        }
+        
+        // Show admin dashboard
+        function showAdminDashboard() {
+            loginPage.classList.add('hidden');
+            adminLoginPage.classList.add('hidden');
+            userDashboard.classList.add('hidden');
+            adminDashboard.classList.remove('hidden');
+            
+            // Load users
+            loadUsers();
+            
+            // Load transactions
+            loadTransactions();
+            
+            // Load results
+            loadResults();
+            
+            // Load winners
+            loadWinners();
+            
+            // Load messages
+            loadMessages();
+        }
+        
+        // Switch tabs
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Switch user tabs
+        function switchUserTab(tabId) {
+            document.querySelectorAll('#user-dashboard .tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('#user-dashboard .nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Switch admin tabs
+        function switchAdminTab(tabId) {
+            document.querySelectorAll('#admin-dashboard .tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.querySelectorAll('#admin-dashboard .nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Login function
+        function login() {
+            const phone = document.getElementById('login-phone').value;
+            const password = document.getElementById('login-password').value;
+            
+            // Check if admin login
+            if (phone === admin.phone && password === admin.password) {
+                currentAdmin = admin;
+                localStorage.setItem('currentAdmin', JSON.stringify(currentAdmin));
+                showAdminDashboard();
+                showNotification('Admin ဝင်ရောက်မှုအောင်မြင်ပါသည်');
+                return;
+            }
+            
+            const user = users.find(u => u.phone === phone && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showUserDashboard();
+                showNotification('ဝင်ရောက်မှုအောင်မြင်ပါသည်');
+            } else {
+                showNotification('ဖုန်းနံပါတ် သို့မဟုတ် လျှို့ဝှက်နံပါတ် မှားယွင်းနေပါသည်', 'error');
+            }
+        }
+        
+        // Admin login function
+        function adminLogin() {
+            const phone = document.getElementById('admin-phone').value;
+            const password = document.getElementById('admin-password').value;
+            
+            if (phone === admin.phone && password === admin.password) {
+                currentAdmin = admin;
+                localStorage.setItem('currentAdmin', JSON.stringify(currentAdmin));
+                showAdminDashboard();
+                showNotification('Admin ဝင်ရောက်မှုအောင်မြင်ပါသည်');
+            } else {
+                showNotification('ဖုန်းနံပါတ် သို့မဟုတ် လျှို့ဝှက်နံပါတ် မှားယွင်းနေပါသည်', 'error');
+            }
+        }
+        
+        // Register function
+        function register() {
+            const name = document.getElementById('reg-name').value;
+            const phone = document.getElementById('reg-phone').value;
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+            
+            if (!name || !phone || !password || !confirmPassword) {
+                showNotification('ကျေးဇူးပြု၍ အချက်အလက်အားလုံးဖြည့်ပါ', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showNotification('လျှို့ဝှက်နံပါတ်များ မကိုက်ညီပါ', 'error');
+                return;
+            }
+            
+            if (users.some(u => u.phone === phone)) {
+                showNotification('ဤဖုန်းနံပါတ်ဖြင့် အကောင့်ရှိပြီးသားဖြစ်သည်', 'error');
+                return;
+            }
+            
+            const newUser = {
+                id: users.length + 1,
+                name,
+                phone,
+                password,
+                balance: 0
+            };
+            
+            users.push(newUser);
+            showNotification('အကောင့်ဖွင့်မှုအောင်မြင်ပါသည်');
+            switchTab('login-tab');
+        }
+        
+        // Place bet function
+        function placeBet() {
+            const digit1 = document.getElementById('digit1').value;
+            const digit2 = document.getElementById('digit2').value;
+            const digit3 = document.getElementById('digit3').value;
+            const amount = parseInt(document.getElementById('bet-amount').value);
+            
+            if (!digit1 || !digit2 || !digit3) {
+                showNotification('ကျေးဇူးပြု၍ ဂဏန်း ၃လုံးဖြည့်ပါ', 'error');
+                return;
+            }
+            
+            if (!amount || amount <= 0) {
+                showNotification('ကျေးဇူးပြု၍ ထိုးငွေပမာဏဖြည့်ပါ', 'error');
+                return;
+            }
+            
+            if (amount > currentUser.balance) {
+                showNotification('လက်ကျန်ငွေမလုံလောက်ပါ', 'error');
+                return;
+            }
+            
+            const bet = {
+                id: bets.length + 1,
+                userId: currentUser.id,
+                userName: currentUser.name,
+                digit1,
+                digit2,
+                digit3,
+                amount,
+                date: new Date().toLocaleString(),
+                paidOut: false
+            };
+            
+            bets.push(bet);
+            currentUser.balance -= amount;
+            updateUserBalance();
+            
+            // Add to transactions for admin approval
+            transactions.push({
+                id: transactions.length + 1,
+                type: 'bet',
+                userId: currentUser.id,
+                userName: currentUser.name,
+                amount,
+                status: 'completed',
+                date: new Date().toLocaleString()
+            });
+            
+            showNotification('ထီးထိုးမှုအောင်မြင်ပါသည်');
+            
+            // Clear inputs
+            document.getElementById('digit1').value = '';
+            document.getElementById('digit2').value = '';
+            document.getElementById('digit3').value = '';
+            document.getElementById('bet-amount').value = '';
+            
+            // Update history
+            loadUserHistory();
+        }
+        
+        // Submit deposit function
+        function submitDeposit() {
+            const name = document.getElementById('deposit-name').value;
+            const phone = document.getElementById('deposit-phone').value;
+            const transactionId = document.getElementById('deposit-transaction').value;
+            const amount = parseInt(document.getElementById('deposit-amount').value);
+            
+            if (!name || !phone || !transactionId || !amount) {
+                showNotification('ကျေးဇူးပြု၍ အချက်အလက်အားလုံးဖြည့်ပါ', 'error');
+                return;
+            }
+            
+            if (amount <= 0) {
+                showNotification('ကျေးဇူးပြု၍ ငွေပမာဏဖြည့်ပါ', 'error');
+                return;
+            }
+            
+            transactions.push({
+                id: transactions.length + 1,
+                type: 'deposit',
+                userId: currentUser.id,
+                userName: currentUser.name,
+                userPhone: currentUser.phone,
+                name,
+                phone,
+                transactionId,
+                amount,
+                status: 'pending',
+                date: new Date().toLocaleString()
+            });
+            
+            showNotification('ငွေသွင်းမှုတောင်းဆိုချက်အောင်မြင်ပါသည်။ Admin အတည်ပြုချက်ကိုစောင့်ပါ');
+            
+            // Clear inputs
+            document.getElementById('deposit-name').value = '';
+            document.getElementById('deposit-phone').value = '';
+            document.getElementById('deposit-transaction').value = '';
+            document.getElementById('deposit-amount').value = '';
+            
+            // Update history
+            loadUserHistory();
+        }
+        
+        // Submit withdraw function
+        function submitWithdraw() {
+            const name = document.getElementById('withdraw-name').value;
+            const phone = document.getElementById('withdraw-phone').value;
+            const amount = parseInt(document.getElementById('withdraw-amount').value);
+            
+            if (!name || !phone || !amount) {
+                showNotification('ကျေးဇူးပြု၍ အချက်အလက်အားလုံးဖြည့်ပါ', 'error');
+                return;
+            }
+            
+            if (amount <= 0) {
+                showNotification('ကျေးဇူးပြု၍ ငွေပမာဏဖြည့်ပါ', 'error');
+                return;
+            }
+            
+            if (amount > currentUser.balance) {
+                showNotification('လက်ကျန်ငွေမလုံလောက်ပါ', 'error');
+                return;
+            }
+            
+            transactions.push({
+                id: transactions.length + 1,
+                type: 'withdraw',
+                userId: currentUser.id,
+                userName: currentUser.name,
+                userPhone: currentUser.phone,
+                name,
+                phone,
+                amount,
+                status: 'pending',
+                date: new Date().toLocaleString()
+            });
+            
+            currentUser.balance -= amount;
+            updateUserBalance();
+            
+            showNotification('ငွေထုတ်မှုတောင်းဆိုချက်အောင်မြင်ပါသည်။ Admin အတည်ပြုချက်ကိုစောင့်ပါ');
+            
+            // Clear inputs
+            document.getElementById('withdraw-name').value = '';
+            document.getElementById('withdraw-phone').value = '';
+            document.getElementById('withdraw-amount').value = '';
+            
+            // Update history
+            loadUserHistory();
+        }
+        
+        // Update user balance display
+        function updateUserBalance() {
+            document.getElementById('user-balance-display').textContent = `လက်ကျန်ငွေ: ${currentUser.balance} ကျပ်`;
+            document.getElementById('profile-balance').textContent = `${currentUser.balance} ကျပ်`;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        }
+        
+        // Load user history
+        function loadUserHistory() {
+            const depositHistory = document.getElementById('deposit-history');
+            const withdrawHistory = document.getElementById('withdraw-history');
+            const betHistory = document.getElementById('bet-history');
+            
+            depositHistory.innerHTML = '';
+            withdrawHistory.innerHTML = '';
+            betHistory.innerHTML = '';
+            
+            // Deposit history
+            transactions
+                .filter(t => t.userId === currentUser.id && t.type === 'deposit')
+                .forEach(trans => {
+                    const transDiv = document.createElement('div');
+                    transDiv.className = 'transaction-item';
+                    transDiv.innerHTML = `
+                        <p><strong>ငွေသွင်းမှု #${trans.id}</strong></p>
+                        <p>ပမာဏ: ${trans.amount} ကျပ်</p>
+                        <p>အခြေအနေ: ${trans.status === 'pending' ? 'ဆိုင်းငံ့ထား' : 'အတည်ပြုပြီး'}</p>
+                        <p>ရက်စွဲ: ${trans.date}</p>
+                    `;
+                    depositHistory.appendChild(transDiv);
+                });
+            
+            // Withdraw history
+            transactions
+                .filter(t => t.userId === currentUser.id && t.type === 'withdraw')
+                .forEach(trans => {
+                    const transDiv = document.createElement('div');
+                    transDiv.className = 'transaction-item';
+                    transDiv.innerHTML = `
+                        <p><strong>ငွေထုတ်မှု #${trans.id}</strong></p>
+                        <p>ပမာဏ: ${trans.amount} ကျပ်</p>
+                        <p>အခြေအနေ: ${trans.status === 'pending' ? 'ဆိုင်းငံ့ထား' : 'အတည်ပြုပြီး'}</p>
+                        <p>ရက်စွဲ: ${trans.date}</p>
+                    `;
+                    withdrawHistory.appendChild(transDiv);
+                });
+            
+            // Bet history
+            bets
+                .filter(b => b.userId === currentUser.id)
+                .forEach(bet => {
+                    const betDiv = document.createElement('div');
+                    betDiv.className = 'transaction-item';
+                    betDiv.innerHTML = `
+                        <p><strong>ထီထိုးမှု #${bet.id}</strong></p>
+                        <p>ဂဏန်း: ${bet.digit1}${bet.digit2}${bet.digit3}</p>
+                        <p>ပမာဏ: ${bet.amount} ကျပ်</p>
+                        <p>ရက်စွဲ: ${bet.date}</p>
+                        ${bet.paidOut ? '<p style="color: green;">ဆုရရှိပြီး</p>' : ''}
+                    `;
+                    betHistory.appendChild(betDiv);
+                });
+        }
+        
+        // Load users for admin
+        function loadUsers() {
+            const usersList = document.getElementById('users-list');
+            usersList.innerHTML = '';
+            
+            users.forEach(user => {
+                const userDiv = document.createElement('div');
+                userDiv.className = 'card';
+                userDiv.style.marginBottom = '10px';
+                userDiv.innerHTML = `
+                    <h4>${user.name}</h4>
+                    <p>ဖုန်း: ${user.phone}</p>
+                    <p>လက်ကျန်ငွေ: ${user.balance} ကျပ်</p>
+                    <button class="btn btn-success btn-small" onclick="sendMessageToUser(${user.id})">မက်ဆေ့ချ်ပို့ရန်</button>
+                `;
+                usersList.appendChild(userDiv);
+            });
+            
+            // Also populate user dropdown for messages
+            const messageUserSelect = document.getElementById('message-user');
+            messageUserSelect.innerHTML = '';
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = `${user.name} (${user.phone})`;
+                messageUserSelect.appendChild(option);
+            });
+        }
+        
+        // Load transactions for admin
+        function loadTransactions() {
+            const depositRequests = document.getElementById('deposit-requests');
+            const withdrawRequests = document.getElementById('withdraw-requests');
+            
+            depositRequests.innerHTML = '';
+            withdrawRequests.innerHTML = '';
+            
+            transactions.filter(t => t.type === 'deposit' && t.status === 'pending').forEach(trans => {
+                const transDiv = document.createElement('div');
+                transDiv.className = 'card';
+                transDiv.style.marginBottom = '10px';
+                transDiv.innerHTML = `
+                    <h4>ငွေသွင်းမှု #${trans.id}</h4>
+                    <p>အသုံးပြုသူ: ${trans.userName} (${trans.userPhone})</p>
+                    <p>ငွေသွင်းသူ: ${trans.name} (${trans.phone})</p>
+                    <p>Transaction ID: ${trans.transactionId}</p>
+                    <p>ပမာဏ: ${trans.amount} ကျပ်</p>
+                    <p>ရက်စွဲ: ${trans.date}</p>
+                    <button class="btn btn-success btn-small" onclick="approveTransaction(${trans.id})">အတည်ပြုမည်</button>
+                    <button class="btn btn-danger btn-small" onclick="rejectTransaction(${trans.id})">ပယ်ဖျက်မည်</button>
+                `;
+                depositRequests.appendChild(transDiv);
+            });
+            
+            transactions.filter(t => t.type === 'withdraw' && t.status === 'pending').forEach(trans => {
+                const transDiv = document.createElement('div');
+                transDiv.className = 'card';
+                transDiv.style.marginBottom = '10px';
+                transDiv.innerHTML = `
+                    <h4>ငွေထုတ်မှု #${trans.id}</h4>
+                    <p>အသုံးပြုသူ: ${trans.userName} (${trans.userPhone})</p>
+                    <p>ငွေထုတ်သူ: ${trans.name} (${trans.phone})</p>
+                    <p>ပမာဏ: ${trans.amount} ကျပ်</p>
+                    <p>ရက်စွဲ: ${trans.date}</p>
+                    <button class="btn btn-success btn-small" onclick="approveTransaction(${trans.id})">အတည်ပြုမည်</button>
+                    <button class="btn btn-danger btn-small" onclick="rejectTransaction(${trans.id})">ပယ်ဖျက်မည်</button>
+                `;
+                withdrawRequests.appendChild(transDiv);
+            });
+        }
+        
+        // Load results for admin
+        function loadResults() {
+            const pastResults = document.getElementById('past-results');
+            pastResults.innerHTML = '';
+            
+            results.slice().reverse().forEach(result => {
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'card';
+                resultDiv.style.marginBottom = '10px';
+                resultDiv.innerHTML = `
+                    <h4>${result.digit1}${result.digit2}${result.digit3}</h4>
+                    <p>ဆုကြေးနှုန်း: ${result.prizeRate}x</p>
+                    <p>ရက်စွဲ: ${result.date}</p>
+                    <button class="btn btn-warning btn-small" onclick="editResult(${result.id})">ပြင်ဆင်မည်</button>
+                `;
+                pastResults.appendChild(resultDiv);
+            });
+        }
+        
+        // Load winners for admin
+        function loadWinners() {
+            const winnersList = document.getElementById('winners-list');
+            winnersList.innerHTML = '';
+            
+            // Sort winners by amount (descending)
+            winners.sort((a, b) => b.amount - a.amount);
+            
+            winners.forEach(winner => {
+                const winnerDiv = document.createElement('div');
+                winnerDiv.className = 'winner-item';
+                winnerDiv.innerHTML = `
+                    <div>
+                        <strong>${winner.userName}</strong> (${winner.userPhone})
+                        <div>ဂဏန်း: ${winner.digits}</div>
+                    </div>
+                    <div class="winner-amount">${winner.amount} ကျပ်</div>
+                `;
+                winnersList.appendChild(winnerDiv);
+            });
+        }
+        
+        // Load messages for admin
+        function loadMessages() {
+            const adminMessages = document.getElementById('admin-messages');
+            adminMessages.innerHTML = '';
+            
+            messages.filter(m => m.toUserId === 'admin' || m.fromUserId === 'admin').forEach(message => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${message.fromUserId === 'admin' ? 'admin-message' : 'user-message'}`;
+                
+                const user = users.find(u => u.id === (message.fromUserId === 'admin' ? message.toUserId : message.fromUserId));
+                const userName = message.fromUserId === 'admin' ? 'Admin' : (user ? user.name : 'Unknown');
+                
+                messageDiv.innerHTML = `
+                    <strong>${userName}:</strong> ${message.content}
+                    <div style="font-size: 12px; color: #666;">${message.date}</div>
+                `;
+                adminMessages.appendChild(messageDiv);
+            });
+            
+            // Scroll to bottom
+            adminMessages.scrollTop = adminMessages.scrollHeight;
+        }
+        
+        // Approve transaction
+        function approveTransaction(id) {
+            const trans = transactions.find(t => t.id === id);
+            if (trans) {
+                trans.status = 'completed';
+                
+                if (trans.type === 'deposit') {
+                    const user = users.find(u => u.id === trans.userId);
+                    if (user) {
+                        user.balance += trans.amount;
+                        
+                        // Add notification message
+                        messages.push({
+                            id: messages.length + 1,
+                            fromUserId: 'admin',
+                            toUserId: user.id,
+                            content: `သင့်ငွေသွင်းမှု #${trans.id} (${trans.amount} ကျပ်) အတည်ပြုပြီးပါပြီ။`,
+                            date: new Date().toLocaleString()
+                        });
+                    }
+                } else if (trans.type === 'withdraw') {
+                    // For withdraw, we already deducted from balance when requested
+                    const user = users.find(u => u.id === trans.userId);
+                    if (user) {
+                        messages.push({
+                            id: messages.length + 1,
+                            fromUserId: 'admin',
+                            toUserId: user.id,
+                            content: `သင့်ငွေထုတ်မှု #${trans.id} (${trans.amount} ကျပ်) အတည်ပြုပြီးပါပြီ။`,
+                            date: new Date().toLocaleString()
+                        });
+                    }
+                }
+                
+                showNotification('လွှဲပြောင်းမှုအတည်ပြုပြီးပါပြီ');
+                loadTransactions();
+            }
+        }
+        
+        // Reject transaction
+        function rejectTransaction(id) {
+            const trans = transactions.find(t => t.id === id);
+            if (trans) {
+                trans.status = 'rejected';
+                
+                if (trans.type === 'deposit') {
+                    const user = users.find(u => u.id === trans.userId);
+                    if (user) {
+                        messages.push({
+                            id: messages.length + 1,
+                            fromUserId: 'admin',
+                            toUserId: user.id,
+                            content: `သင့်ငွေသွင်းမှု #${trans.id} (${trans.amount} ကျပ်) ကိုပယ်ဖျက်လိုက်ပါသည်။`,
+                            date: new Date().toLocaleString()
+                        });
+                    }
+                } else if (trans.type === 'withdraw') {
+                    const user = users.find(u => u.id === trans.userId);
+                    if (user) {
+                        user.balance += trans.amount; // Return the money
+                        
+                        messages.push({
+                            id: messages.length + 1,
+                            fromUserId: 'admin',
+                            toUserId: user.id,
+                            content: `သင့်ငွေထုတ်မှု #${trans.id} (${trans.amount} ကျပ်) ကိုပယ်ဖျက်လိုက်ပါသည်။ ငွေပြန်လည်ထည့်သွင်းပြီးပါပြီ။`,
+                            date: new Date().toLocaleString()
+                        });
+                    }
+                }
+                
+                showNotification('လွှဲပြောင်းမှုပယ်ဖျက်ပြီးပါပြီ');
+                loadTransactions();
+            }
+        }
+        
+        // Submit result
+        function submitResult() {
+            const digit1 = document.getElementById('result-digit1').value;
+            const digit2 = document.getElementById('result-digit2').value;
+            const digit3 = document.getElementById('result-digit3').value;
+            const prizeRate = parseInt(document.getElementById('prize-rate').value);
+            
+            if (!digit1 || !digit2 || !digit3) {
+                showNotification('ကျေးဇူးပြု၍ ဂဏန်း ၃လုံးဖြည့်ပါ', 'error');
+                return;
+            }
+            
+            if (!prizeRate || prizeRate <= 0) {
+                showNotification('ကျေးဇူးပြု၍ ဆုကြေးနှုန်းဖြည့်ပါ', 'error');
+                return;
+            }
+            
+            const result = {
+                id: results.length + 1,
+                digit1,
+                digit2,
+                digit3,
+                prizeRate,
+                date: new Date().toLocaleString()
+            };
+            
+            results.push(result);
+            
+            // Clear previous winners for this result
+            winners = winners.filter(w => w.resultId !== result.id);
+            
+            // Check for winning bets
+            const winningNumber = digit1 + digit2 + digit3;
+            const winningBets = bets.filter(bet => 
+                `${bet.digit1}${bet.digit2}${bet.digit3}` === winningNumber &&
+                !bet.paidOut
+            );
+            
+            winningBets.forEach(bet => {
+                const user = users.find(u => u.id === bet.userId);
+                if (user) {
+                    const winnings = bet.amount * prizeRate;
+                    user.balance += winnings;
+                    
+                    // Mark bet as paid
+                    bet.paidOut = true;
+                    
+                    // Add to winners list
+                    winners.push({
+                        resultId: result.id,
+                        userId: user.id,
+                        userName: user.name,
+                        userPhone: user.phone,
+                        digits: winningNumber,
+                        amount: winnings,
+                        date: new Date().toLocaleString()
+                    });
+                    
+                    // Add notification
+                    messages.push({
+                        id: messages.length + 1,
+                        fromUserId: 'admin',
+                        toUserId: user.id,
+                        content: `မဂ်လာပါ! သင်ထိုးထားသော ${bet.digit1}${bet.digit2}${bet.digit3} ဂဏန်း ${winningNumber} နှင့်ကိုက်ညီပါသည်။ ${winnings} ကျပ်ဆုငွေရရှိပါသည်။`,
+                        date: new Date().toLocaleString()
+                    });
+                }
+            });
+            
+            // Broadcast result to all users
+            users.forEach(user => {
+                messages.push({
+                    id: messages.length + 1,
+                    fromUserId: 'admin',
+                    toUserId: user.id,
+                    content: `ထီရလဒ်: ${digit1}${digit2}${digit3} (ဆုကြေး ${prizeRate}x)`,
+                    date: new Date().toLocaleString()
+                });
+            });
+            
+            showNotification('ထီရလဒ်ထည့်သွင်းပြီးပါပြီ');
+            
+            // Clear inputs
+            document.getElementById('result-digit1').value = '';
+            document.getElementById('result-digit2').value = '';
+            document.getElementById('result-digit3').value = '';
+            
+            // Reload results and winners
+            loadResults();
+            loadWinners();
+        }
+        
+        // Edit result
+        function editResult(id) {
+            const result = results.find(r => r.id === id);
+            if (result) {
+                document.getElementById('result-digit1').value = result.digit1;
+                document.getElementById('result-digit2').value = result.digit2;
+                document.getElementById('result-digit3').value = result.digit3;
+                document.getElementById('prize-rate').value = result.prizeRate;
+                
+                showNotification('ကျေးဇူးပြု၍ ဂဏန်းများကိုပြင်ဆင်ပြီး ရလဒ်ထည့်သွင်းမည်ကိုနှိပ်ပါ');
+            }
+        }
+        
+        // Send message to user
+        function sendMessageToUser(userId) {
+            const user = users.find(u => u.id === userId);
+            if (user) {
+                document.getElementById('message-user').value = userId;
+                switchAdminTab('messages-tab');
+            }
+        }
+        
+        // Send message
+        function sendMessage() {
+            const userId = parseInt(document.getElementById('message-user').value);
+            const content = document.getElementById('message-content').value;
+            
+            if (!userId || !content) {
+                showNotification('ကျေးဇူးပြု၍ အသုံးပြုသူနှင့်မက်ဆေ့ချ်ဖြည့်ပါ', 'error');
+                return;
+            }
+            
+            messages.push({
+                id: messages.length + 1,
+                fromUserId: 'admin',
+                toUserId: userId,
+                content,
+                date: new Date().toLocaleString()
+            });
+            
+            showNotification('မက်ဆေ့ချ်ပေးပို့ပြီးပါပြီ');
+            document.getElementById('message-content').value = '';
+            loadMessages();
+        }
+        
+        // Logout function
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            showLoginPage();
+            showNotification('အကောင့်မှထွက်ခွားပြီးပါပြီ');
+        }
+        
+        // Admin logout function
+        function adminLogout() {
+            currentAdmin = null;
+            localStorage.removeItem('currentAdmin');
+            showLoginPage();
+            showNotification('Admin အကောင့်မှထွက်ခွားပြီးပါပြီ');
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Initialize the app when the page loads
+        window.onload = init;
+    </script>
+</body>
+</html>
